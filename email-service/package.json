@@ -1,0 +1,11 @@
+{
+  "name": "contact-form-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "email.js",
+  "scripts": {
+    "deploy": "sls deploy --stage=dev"
+  },
+  "author": "Dmitry Grinko",
+  "license": "ISC"
+}

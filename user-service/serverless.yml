@@ -1,0 +1,38 @@
+service: user-service
+
+custom:
+  stage: ${opt:stage, 'dev'}
+
+plugins:
+  - serverless-offline
+provider:
+  name: aws
+  runtime: nodejs12.x
+  profile: rwdvs
+  stage: ${opt:stage, 'dev'}
+  stackName: "${self:service}-${self:custom.stage}"
+  apiKeys:
+    - user_service_${opt:stage}
+  region: us-east-1
+
+functions:
+  createUser: ${file(./functions.yml):${'functions.createUser'}}
+
+resources:
+  - Resources:
+      SNSIamPolicy:
+        Type: AWS::IAM::Policy
+        Properties:
+          PolicyName: lambda-SNS
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sns:Publish
+                Resource:
+                  - ${file(./env.yml):${'SNS_EMAIL_TOPIC'}}
+
+          Roles:
+            - Ref: IamRoleLambdaExecution   
+

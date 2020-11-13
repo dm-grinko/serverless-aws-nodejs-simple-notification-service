@@ -1,0 +1,11 @@
+functions:
+  createUser:
+    handler: user.createUser
+    timeout: 10
+    events:
+      - http: 
+          path: user
+          method: post
+          cors: true
+    environment:
+      SNS_EMAIL_TOPIC: ${file(./env.yml):${'SNS_EMAIL_TOPIC'}}
